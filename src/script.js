@@ -1,15 +1,10 @@
 import './style.css'
-
 import * as THREE from 'three'
-
-// import {
-//   OrbitControls
-// } from 'three/examples/jsm/controls/OrbitControls.js'
 import {
   RGBELoader
 } from "three/examples/jsm/loaders/RGBELoader.js"
 import {
-  EffectComposer
+  EffectComposerk
 } from "three/examples/jsm/postprocessing/EffectComposer.js"
 import {
   RenderPass
@@ -25,9 +20,6 @@ import {
 import {
   TextGeometry
 } from "three/examples/jsm/geometries/TextGeometry.js"
-import { MaxEquation } from 'three'
-
-const lerp = (a, b, n) => (1 - n) * a + n * b;
 
 const options = {
   enableSwoopingCamera: false,
@@ -54,7 +46,7 @@ const fog = new THREE.Fog('#A842FF', 20, 40)
 scene.fog = fog
 
 const textureLoader = new THREE.TextureLoader()
-const matcapTexture = textureLoader.load('/textures/matcaps/10.png')
+const matcapTexture = textureLoader.load('/textures/matcaps/10.jpeg')
 const matcapMaterial = new THREE.MeshMatcapMaterial({
   matcap: matcapTexture
 })
@@ -217,8 +209,8 @@ window.addEventListener('mousemove', (e) => {
 
 const adjustedCursor = new THREE.Vector2();
 window.addEventListener('mousemove', (_event) => {
-    adjustedCursor.x = _event.clientX / sizes.width * 2 - 1;
-    adjustedCursor.y = - (_event.clientY / sizes.height) * 2 + 1;
+  adjustedCursor.x = _event.clientX / sizes.width * 2 - 1;
+  adjustedCursor.y = -(_event.clientY / sizes.height) * 2 + 1;
 })
 
 const camera = new THREE.PerspectiveCamera(45, sizes.width / sizes.height, 0.1, 30)
