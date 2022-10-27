@@ -1,11 +1,7 @@
 import './style.css'
 import * as THREE from 'three'
-import {
-  RGBELoader
-} from "three/examples/jsm/loaders/RGBELoader.js"
-import {
-  EffectComposerk
-} from "three/examples/jsm/postprocessing/EffectComposer.js"
+import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js"
+import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js"
 import {
   RenderPass
 } from "three/examples/jsm/postprocessing/RenderPass.js"
@@ -191,7 +187,7 @@ window.addEventListener('resize', () => {
   camera.updateProjectionMatrix()
 
   renderer.setSize(sizes.width, sizes.height)
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, w))
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
 
 const sizes = {
