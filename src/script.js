@@ -46,7 +46,7 @@ const fog = new THREE.Fog('#A842FF', 20, 40)
 scene.fog = fog
 
 const textureLoader = new THREE.TextureLoader()
-const matcapTexture = textureLoader.load('/textures/matcaps/10.jpeg')
+const matcapTexture = textureLoader.load('./textures/matcaps/10.jpeg')
 const matcapMaterial = new THREE.MeshMatcapMaterial({
   matcap: matcapTexture
 })
