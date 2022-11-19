@@ -1,7 +1,9 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const { loader } = require('mini-css-extract-plugin')
 const MiniCSSExtractPlugin = require('mini-css-extract-plugin')
 const path = require('path')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
     entry: path.resolve(__dirname, '../src/script.js'),
@@ -10,12 +12,33 @@ module.exports = {
         filename: 'bundle.[contenthash].js',
         path: path.resolve(__dirname, '../dist')
     },
+    optimization: {
+        moduleIds: "deterministic",
+        runtimeChunk: "single",
+        splitChunks: {
+            cacheGroups: {
+                vendor: {
+                    test: /node_modules/,
+                    name: "vendors",
+                    chunks: "all",
+                    enforce: true
+                }
+            }
+        }
+    },
     devtool: 'source-map',
-    plugins:
-    [
+    plugins: [
+        // new BundleAnalyzerPlugin(),
         new CopyWebpackPlugin({
             patterns: [
-                { from: path.resolve(__dirname, '../static') }
+                {
+                    from: path.resolve(__dirname, '../static/'),
+                    globOptions: {
+                        dot: true,
+                        gitignore: true,
+                        ignore: ["**/img/**", "**/fonts/**"]
+                    },
+                }
             ]
         }),
         new HtmlWebpackPlugin({
@@ -30,8 +53,26 @@ module.exports = {
         [
             // HTML
             {
-                test: /\.(html)$/,
-                use: ['html-loader']
+                test: /\.html$/,
+                use: {
+                    loader: 'html-loader',
+                    options: {
+                        attributes: {
+                            list: [
+                                {
+                                    tag: "img",
+                                    attribute: "data-src",
+                                    type: "src"
+                                },
+                                {
+                                    tag: "img",
+                                    attribute: "data-srcset",
+                                    type: "srcset"
+                                },
+                            ],
+                        }
+                    },
+                },
             },
 
             // JS
@@ -41,7 +82,7 @@ module.exports = {
                 use:
                 [
                     'babel-loader'
-                ]
+                    ]
             },
 
             // CSS
@@ -56,7 +97,7 @@ module.exports = {
 
             // Images
             {
-                test: /\.(jpg|png|gif|svg)$/,
+                test: /\.(jp?g|png|svg)$/,
                 use:
                 [
                     {
@@ -71,7 +112,7 @@ module.exports = {
 
             // Fonts
             {
-                test: /\.(ttf|eot|woff|woff2)$/,
+                test: /\.(ttf|otf|eot|woff|woff2)$/,
                 use:
                 [
                     {
@@ -81,6 +122,17 @@ module.exports = {
                             outputPath: 'assets/fonts/'
                         }
                     }
+                ]
+            },
+
+            // GLSL
+            {
+                test: /\.(glsl|vs|fs|vert|frag)$/,
+                exclude: /node_modules/,
+                use:
+                [
+                    'raw-loader',
+                    'glslify-loader'
                 ]
             }
         ]
