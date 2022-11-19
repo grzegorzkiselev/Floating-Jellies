@@ -256,6 +256,21 @@ const tick = () => {
   const deltaTime = elapsedTime - oldElapsedTime
   oldElapsedTime = elapsedTime
 
+  camera.rotation.x = Math.sin(elapsedTime / 10)
+  camera.rotation.x += (Math.sin(elapsedTime) * 0.5) * .01
+  camera.rotation.z = (Math.sin(elapsedTime / 4) * cursor.x) * 0.5
+  stickBoby.quaternion.copy(camera.quaternion)
+  // stickThree.quaternion.copy(camera.quaternion)
+
+  camera.position.x += (cursor.x * 15 - camera.position.x) * .01
+  camera.position.y += (cursor.y * 15 - camera.position.y) * .01
+  const screenPosition = new THREE.Vector3(cursor.x, cursor.y, 0)
+  screenPosition.unproject(camera)
+  stickBoby.position.set(screenPosition.x / 2, screenPosition.y / 2, 0)
+  // stickThree.position.copy(stickBoby.position)
+
+  camera.lookAt(0, 0, 0)
+
   raycaster.setFromCamera(adjustedCursor, camera)
 
   const intersects = raycaster.intersectObjects(targets)
@@ -272,21 +287,6 @@ const tick = () => {
     currentIntersect.object.material.roughness = Math.min(0.35, currentIntersect.object.material.roughness += 0.09)
     intersected.push(currentIntersect)
   }
-
-  camera.rotation.x = Math.sin(elapsedTime / 10)
-  camera.rotation.x += (Math.sin(elapsedTime) * 0.5) * .01
-  camera.rotation.z = (Math.sin(elapsedTime / 4) * cursor.x) * 0.5
-  camera.lookAt(0, 0, 0)
-  stickBoby.quaternion.copy(camera.quaternion)
-  // stickThree.quaternion.copy(camera.quaternion)
-
-  camera.position.x += (cursor.x * 15 - camera.position.x) * .01
-  camera.position.y += (cursor.y * 15 - camera.position.y) * .01
-  const screenPosition = new THREE.Vector3(cursor.x, cursor.y, 0)
-  screenPosition.unproject(camera)
-  stickBoby.position.set(screenPosition.x / 2, screenPosition.y / 2, 0)
-  // stickThree.position.copy(stickBoby.position)
-
 
   world.step(1 / 60, deltaTime, 3)
 
